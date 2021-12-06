@@ -43,8 +43,9 @@ class Crawler():
         #資料前處理
         for text in mian_claim_resouce:
             if text.has_attr('num'):
-                main_claim_no.append(int(text['num']))
-                main_claim.append(text.getText().replace("\n",""))
+                if text['num'].isdigit():
+                    main_claim_no.append(int(text['num']))
+                    main_claim.append(text.getText().replace("\n",""))
         for text in dependent_claim_resource:
             dependent_claim.append(text.getText())
         start = 0
@@ -136,7 +137,7 @@ class Crawler():
         for pdf in pdf_resouce:
             with open(pdf_path, "wb") as file:
                 file.write(requests.get(pdf['content']).content)
-        pdf_img = convert_from_path(pdf_path)
+        pdf_img = convert_from_path(pdf_path, first_page=1, last_page=1)
         pdf_img[0].save('output/' + patent_id +'/pdf.jpg',"JPEG")
         return 0
 
